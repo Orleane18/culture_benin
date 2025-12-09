@@ -2500,7 +2500,7 @@
         </section>
 
         <!-- Section Galerie -->
-       
+        <section class="gallery" id="galerie">
             <div class="container">
                 <div class="section-title">
                     <h2>Galerie Culturelle</h2>
@@ -2542,7 +2542,7 @@
                     </div>
                 </div>
             </div>
-       
+        </section>
 
         <!-- Pied de page -->
         <footer>

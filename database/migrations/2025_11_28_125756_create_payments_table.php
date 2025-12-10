@@ -14,28 +14,25 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
 
-            // Utilisateur qui a payé
+            // Utilisateur qui a payé (FK vers la table 'utilisateurs')
             $table->foreignId('id_utilisateur')
-                ->constrained()
+                ->constrained('utilisateurs')
                 ->onDelete('cascade');
 
-            // ID de la transaction côté FedaPay (peut être null si accès gratuit)
+            // ID de la transaction côté FedaPay
             $table->string('transaction_id')->nullable();
 
             // Contenu concerné
-            $table->string('id_type_contenu');          // article, video, podcast, interview...
-            $table->unsignedBigInteger('id_contenu'); // ID du contenu dans sa table
+            $table->string('id_type_contenu');        // article, video, podcast...
+            $table->unsignedBigInteger('id_contenu'); // ID du contenu
 
-            // Montant payé (en FCFA)
+            // Montant payé
             $table->decimal('montant', 10, 2);
 
             // Statut du paiement
-            // pending   => en attente
-            // completed => payé
-            // failed    => échoué / annulé
             $table->string('status')->default('pending');
 
-            // Métadonnées (stocke token Fedapay, titre du contenu, etc.)
+            // Métadonnées
             $table->json('metadata')->nullable();
 
             $table->timestamps();

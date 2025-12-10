@@ -10,14 +10,11 @@ use App\Http\Controllers\PrincipaleController;
 use App\Http\Controllers\PaymentController;
 
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 
-Route::get('/accueil', [AccueilController::class, 'index'])->name('accueil');
+Route::get('/', [AccueilController::class, 'index'])->name('accueil');
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.perform');
@@ -60,16 +57,7 @@ Route::get('/payment/callback', [PaymentController::class, 'paymentCallback'])
 // Route::get('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
 // Route::get('/payment/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
 
-Route::controller(PrincipaleController::class)->group(function () {
-    Route::get('/',        'home')->name('home');
-    Route::get('/about',   'about')->name('about');
-    Route::get('/domaines','domaines')->name('domaines');
-    Route::get('/langues', 'langues')->name('langues');
-    Route::get('/regions', 'regions')->name('regions');
-    Route::get('/content', 'content')->name('content');
-    Route::get('/gallery', 'gallery')->name('gallery');
-    Route::get('/contact', 'contact')->name('contact');
-});
+
 
 // Routes d'authentification
 // Auth::routes();

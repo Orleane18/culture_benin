@@ -16,14 +16,15 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // User::factory(10)->create();
-        $this->call([
-            RoleSeeder::class,
-            LangueSeeder::class,
-            RegionSeeder::class,
-            MediaSeeder::class,
-            TypeMediaSeeder::class,
-            UtilisateurSeeder::class,
-            ContenuSeeder::class,
-        ]);   
+     $this->call([
+    RoleSeeder::class,
+    LangueSeeder::class,
+    RegionSeeder::class,
+    TypeMediaSeeder::class,  // ← avant MediaSeeder
+    MediaSeeder::class,      // ← après TypeMediaSeeder
+    UtilisateurSeeder::class,
+    ContenuSeeder::class,
+]);
+  
     }
 }

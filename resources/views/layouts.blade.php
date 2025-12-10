@@ -247,7 +247,7 @@
                     <!--begin::User Image-->
                     <li class="user-header text-bg-primary">
                         <img
-                            src="{{URL::asset('adminlte/img/user2-160x160.jpg')}}"
+                            src="{{asset('adminlte/img/user2-160x160.jpg')}}"
                             class="rounded-circle shadow"
                             alt="User Image"
                         />

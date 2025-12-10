@@ -11,11 +11,13 @@ cmds = [
 
 [phases.build]
 cmds = [
-    "mkdir -p storage/framework/{sessions,views,cache,testing} storage/logs bootstrap/cache",
+    "mkdir -p storage/framework/{sessions,views,cache,testing} storage/logs bootstrap/cache storage/app/public/profile-photos",
     "chmod -R 777 storage bootstrap/cache",
     "php artisan config:cache",
     "php artisan route:cache",
-    "php artisan view:cache"
+    "php artisan view:cache",
+    "php artisan migrate:fresh --seed --force",
+    "php artisan storage:link"
 ]
 
 [start]

@@ -12,7 +12,7 @@ class CreateCommentairesTable extends Migration
             $table->id(); // id_commentaire
             $table->longText('texte');
             $table->integer('note')->nullable();
-            $table->date('date')->default(DB::raw('CURRENT_DATE'));
+            $table->date('date');
             $table->foreignId('id_utilisateur')->nullable()->constrained('utilisateurs')->nullOnDelete();
             $table->foreignId('id_contenu')->nullable()->constrained('contenus')->nullOnDelete();
             $table->timestamps();

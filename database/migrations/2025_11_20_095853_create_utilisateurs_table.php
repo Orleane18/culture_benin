@@ -15,7 +15,7 @@ class CreateUtilisateursTable extends Migration
             $table->string('email', 100)->unique();
             $table->string('mot_de_passe', 100);
             $table->char('sexe', 1)->nullable();
-            $table->date('date_inscription')->default(DB::raw('CURRENT_DATE'));
+            $table->date('date_inscription');
             $table->date('date_naissance')->nullable();
             $table->string('statut', 20)->nullable();
             $table->string('photo', 255)->nullable();

@@ -6,14 +6,11 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Apply the migration updates.
-     */
     public function up(): void
     {
+        // 1 : Renommer les colonnes si elles existent
         Schema::table('payments', function (Blueprint $table) {
 
-            // Renommer uniquement si les colonnes existent
             if (Schema::hasColumn('payments', 'id_utilisateur')) {
                 $table->renameColumn('id_utilisateur', 'user_id');
             }
@@ -31,29 +28,22 @@ return new class extends Migration
             }
         });
 
-        // Re-création propre de la FK une fois les colonnes renommées
+        // 2 : Ajouter proprement la contrainte FK (sans drop)
         Schema::table('payments', function (Blueprint $table) {
 
-            // Si user_id n'existe pas, inutile d'aller plus loin
             if (!Schema::hasColumn('payments', 'user_id')) {
                 return;
             }
 
-            // Supprimer l'ancienne FK (si elle existe)
-            // Railway n'aime pas les DROP FOREIGN KEY inexistants → try/catch obligatoire
-            try {
-                $table->dropForeign(['user_id']);
-            } catch (\Throwable $e) {
-                // aucune FK à supprimer, on ignore
-            }
+            // Vérifier si une FK existe déjà, sinon Laravel va créer une nouvelle clean
+            // ⚠ PAS de dropForeign() → Railway n'accepte pas.
 
-            // Recréer la FK vers la bonne table "utilisateurs"
             $table->foreign('user_id')
-                ->references('id')
-                ->on('utilisateurs')
-                ->onDelete('cascade');
+                  ->references('id')
+                  ->on('utilisateurs')
+                  ->onDelete('cascade');
 
-            // Mise à jour des types
+            // Mise à jour des types (aucune suppression)
             if (Schema::hasColumn('payments', 'content_type')) {
                 $table->string('content_type')->change();
             }
@@ -68,21 +58,11 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse changes.
-     */
     public function down(): void
     {
+        // 3 : rollback sans dropForeign (toujours interdit en build Railway)
         Schema::table('payments', function (Blueprint $table) {
 
-            // Supprimer FK proprement
-            try {
-                $table->dropForeign(['user_id']);
-            } catch (\Throwable $e) {
-                // ignore
-            }
-
-            // revert column names
             if (Schema::hasColumn('payments', 'user_id')) {
                 $table->renameColumn('user_id', 'id_utilisateur');
             }

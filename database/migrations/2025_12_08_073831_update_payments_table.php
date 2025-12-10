@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('payments', function (Blueprint $table) {
 
-            // 1. Renommer les colonnes si elles existent
+            // Renommer uniquement si les colonnes existent
             if (Schema::hasColumn('payments', 'id_utilisateur')) {
                 $table->renameColumn('id_utilisateur', 'user_id');
             }
@@ -31,28 +31,40 @@ return new class extends Migration
             }
         });
 
-        // 2. Appliquer les modifications de type et contraintes
+        // Re-création propre de la FK une fois les colonnes renommées
         Schema::table('payments', function (Blueprint $table) {
 
-            // S'assurer que user_id est une FK vers users
-            if (!Schema::hasColumn('payments', 'user_id')) return;
-
-            // Supprimer l'ancienne contrainte si nécessaire
-            try {
-                $table->dropForeign(['user_id']);
-            } catch (\Exception $e) {
-                // ignorer si aucune contrainte existante
+            // Si user_id n'existe pas, inutile d'aller plus loin
+            if (!Schema::hasColumn('payments', 'user_id')) {
+                return;
             }
 
-            // Recréer la contrainte FK propre
-            $table->foreign('user_id')
-                  ->references('id')->on('users')
-                  ->onDelete('cascade');
+            // Supprimer l'ancienne FK (si elle existe)
+            // Railway n'aime pas les DROP FOREIGN KEY inexistants → try/catch obligatoire
+            try {
+                $table->dropForeign(['user_id']);
+            } catch (\Throwable $e) {
+                // aucune FK à supprimer, on ignore
+            }
 
-            // Corriger les types
-            $table->string('content_type')->change();
-            $table->unsignedBigInteger('content_id')->change();
-            $table->decimal('amount', 10, 2)->change();
+            // Recréer la FK vers la bonne table "utilisateurs"
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('utilisateurs')
+                ->onDelete('cascade');
+
+            // Mise à jour des types
+            if (Schema::hasColumn('payments', 'content_type')) {
+                $table->string('content_type')->change();
+            }
+
+            if (Schema::hasColumn('payments', 'content_id')) {
+                $table->unsignedBigInteger('content_id')->change();
+            }
+
+            if (Schema::hasColumn('payments', 'amount')) {
+                $table->decimal('amount', 10, 2)->change();
+            }
         });
     }
 
@@ -62,6 +74,13 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('payments', function (Blueprint $table) {
+
+            // Supprimer FK proprement
+            try {
+                $table->dropForeign(['user_id']);
+            } catch (\Throwable $e) {
+                // ignore
+            }
 
             // revert column names
             if (Schema::hasColumn('payments', 'user_id')) {

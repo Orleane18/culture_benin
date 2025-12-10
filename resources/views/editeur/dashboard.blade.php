@@ -103,7 +103,7 @@
         </h3>
         <p class="text-gray-500 text-sm mt-1 ml-13">Les contenus que vous avez créés et publiés</p>
       </div>
-      <a href="{{ route('contenus.create') }}" 
+      <a href="{{ route('editeur.contenus.index') }}" 
          class="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-primary-500 to-primary-600 text-black font-semibold rounded-lg hover:from-primary-600 hover:to-primary-700 transition-all duration-300 active:scale-95">
         <i class="fas fa-plus"></i>
         <span>Nouveau Contenu</span>
@@ -194,13 +194,13 @@
         @endforeach
       </div>
       
-      <div class="mt-8 text-center">
+      <!-- <div class="mt-8 text-center">
         <a href="{{ route('contenus.index') }}" 
            class="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium gap-2 group">
           <span>Voir tous mes contenus</span>
           <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
         </a>
-      </div>
+      </div> -->
     </div>
   </div>
 

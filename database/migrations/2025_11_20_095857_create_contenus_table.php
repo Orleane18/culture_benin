@@ -12,7 +12,7 @@ class CreateContenusTable extends Migration
             $table->id(); // id_contenu
             $table->string('titre', 255);
             $table->longText('texte')->nullable(); // CLOB
-            $table->date('date_creation')->default(DB::raw('CURRENT_DATE'));
+            $table->date('date_creation');
             $table->string('statut', 20)->nullable();
             $table->foreignId('parent_id')->nullable()->constrained('contenus')->nullOnDelete();
             $table->date('date_validation')->nullable();

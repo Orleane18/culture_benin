@@ -1785,7 +1785,7 @@
         }
     </style>
 </head>
-<body>
+<body style="backgroud-color: white;">
     <!-- Fond animé innovant -->
     <div class="innovative-background">
         <div class="african-patterns"></div>
